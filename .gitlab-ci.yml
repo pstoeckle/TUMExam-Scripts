@@ -1,0 +1,38 @@
+stages:
+    - build
+    - deploy
+
+python:build:
+    artifacts:
+        paths:
+            - dist
+        expire_in: 3 days
+    cache: &python-cache
+        key: ${CI_COMMIT_REF_SLUG}
+        paths:
+            - ".venv"
+    image: gitlab.lrz.de:5005/i4/software/docker-images/python3.9-poetry:0.1.1
+    needs: []
+    rules: &python-rules
+        -   changes:
+                - "tum_exam_scripts/**.py"
+                - .gitlab-ci.yml
+        -   if: '$CI_COMMIT_BRANCH == "main"'
+        -   if: '$CI_COMMIT_BRANCH == "development"'
+    script:
+        - echo $COMMIT_SHORT
+        - poetry install --no-dev
+        - poetry build
+    stage: build
+
+python:deploy:
+    cache: *python-cache
+    image: gitlab.lrz.de:5005/i4/software/docker-images/python3.9-poetry
+    rules:
+    -   if: '$CI_COMMIT_TAG'
+    script:
+        - poetry config repositories.lrz https://gitlab.lrz.de/api/v4/projects/${CI_PROJECT_ID}/packages/pypi
+        - poetry publish --repository lrz --username $CI_REGISTRY_USER --password $CI_REGISTRY_PASSWORD
+    stage: deploy
+    needs:
+        - python:build

@@ -10,10 +10,10 @@ from typing import List
 from urllib.request import urlretrieve
 
 from tqdm import tqdm
-from typer import Exit, Option, Typer, confirm, echo, style
-from typer.colors import RED
 
 from tum_exam_scripts import __version__
+from typer import Exit, Option, Typer, confirm, echo, style
+from typer.colors import RED
 
 _DRIVER_OPTION = Option("followmeppd", "--driver-name", "-d", help="Name of the driver")
 
@@ -104,7 +104,6 @@ def install_linux_driver(
         ],
         user_password,
     )
-
     _sudo_call(["cupsenable", driver_name], user_password)
     _sudo_call(["cupsaccept", driver_name], user_password)
     remove(local_file)
@@ -114,8 +113,12 @@ def _sudo_call(command: List[str], password: str) -> None:
     """
     Sudo call.
     """
+    changed_command = ["sudo", "-S"] + command
+    _LOGGER.info("Calling ...")
+    _LOGGER.info(" ".join(changed_command))
+    _LOGGER.info("Done!")
     proc = Popen(
-        ["sudo", "-S"] + command,
+        changed_command,
         stdin=PIPE,
         stdout=PIPE,
         stderr=PIPE,
@@ -185,6 +188,9 @@ def _send_pdf_files(driver_name: str, pdf_files: List[Path]) -> None:
             "JCLPrintQuality=Enhanced",
             str(pdf_file),
         ]
+        _LOGGER.info("Calling ...")
+        _LOGGER.info(" ".join(current_command))
+        _LOGGER.info("Done!")
         res = check_call(current_command)
         if res != 0:
             error_echo(f"Something went wrong when sending {pdf_file} to the server")
@@ -256,6 +262,9 @@ def send_attendee_list(
         "MediaType=Labels",
         str(attend_list),
     ]
+    _LOGGER.info("Calling ...")
+    _LOGGER.info(" ".join(current_command))
+    _LOGGER.info("Done!")
     res = check_call(current_command)
     if res != 0:
         error_echo(f"Something went wrong when sending {attend_list} to the server")
