@@ -11,8 +11,9 @@ from urllib.request import urlretrieve
 
 from tum_exam_scripts import __version__
 from tum_exam_scripts.utils import (
-    send_pdf_files, call_command,
+    call_command,
     confirm_printing_rights,
+    send_pdf_files,
     sudo_call,
 )
 from typer import Exit, Option, Typer, echo
@@ -75,10 +76,12 @@ def install_linux_driver(
     """
     tempdir = Path(gettempdir())
     local_file = tempdir.joinpath("x2UNIV.ppd")
+    _LOGGER.info("Download PPD file")
     urlretrieve(
         "https://wiki.in.tum.de/foswiki/pub/Informatik/Benutzerwiki/XeroxDrucker/x2UNIV.ppd",
         str(local_file),
     )
+    _LOGGER.info("Success!")
     sudo_call(
         [
             "lpadmin",
@@ -96,9 +99,11 @@ def install_linux_driver(
         ],
         user_password,
     )
+    echo("The Linux driver was successfully installed!")
+    remove(local_file)
     sudo_call(["cupsenable", driver_name], user_password)
     sudo_call(["cupsaccept", driver_name], user_password)
-    remove(local_file)
+    echo(f"The printing service is available under {driver_name}")
 
 
 @app.command()
