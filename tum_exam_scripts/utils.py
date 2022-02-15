@@ -1,7 +1,7 @@
 """
 Utils.
 """
-import subprocess
+import subprocess  # NOTE: Keep for mock/testing
 from logging import getLogger
 from pathlib import Path
 from subprocess import PIPE, Popen
@@ -11,7 +11,7 @@ from click import echo, style
 from click.exceptions import Exit
 from tqdm import tqdm
 
-import typer
+import typer  # NOTE: Keep for mock/testing
 from tum_exam_scripts.pdf_utils import is_full_pdf
 from typer.colors import RED
 
