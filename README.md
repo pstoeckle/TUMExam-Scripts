@@ -1,5 +1,17 @@
 # TUMExam Scripts
 
+[_TOC_]
+
+## TL;DR
+
+```bash
+pip3 install tum-exam-scripts --extra-index-url https://TUM:7rpYfJvEqzG3MvwN3Xfo@gitlab.lrz.de/api/v4/projects/102241/packages/pypi/simple
+tum-exam-scripts install-linux-driver
+tum-exam-scripts send-all-booklets --input-directory /path/to/exams
+tum-exam-scripts send-attendee-list --attendee-list
+  /path/to/attendeelist.pdf
+```
+
 ## Overview 
 
 ```bash
