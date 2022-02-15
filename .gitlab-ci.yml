@@ -31,6 +31,11 @@ python:quality:
     stage: pre-analysis
 
 python:test:
+    artifacts:
+        when: always
+        reports:
+            junit: report.xml
+            cobertura: coverage.xml
     cache: *python-cache
     image: gitlab.lrz.de:5005/i4/software/docker-images/python3.9-poetry:0.1.1
     needs:
@@ -38,7 +43,9 @@ python:test:
     rules: *python-rules
     script:
         - poetry install
-        - poetry run pytest tests/
+        - poetry run coverage run -m pytest --junitxml=report.xml tests/
+        - poetry run coverage report
+        - poetry run coverage xml
     stage: test
 
 python:package:
