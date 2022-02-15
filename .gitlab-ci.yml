@@ -1,29 +1,60 @@
 stages:
-    - build
+    - pre-analysis
+    - test
+    - package
     - deploy
 
-python:build:
+python:quality:
     artifacts:
-        paths:
-            - dist
-        expire_in: 3 days
+        reports:
+            cobertura: cobertura.xml
+            junit: mypy.xml
+        expire_in: 10 days
     cache: &python-cache
         key: ${CI_COMMIT_REF_SLUG}
         paths:
             - ".venv"
-    image: gitlab.lrz.de:5005/i4/software/docker-images/python3.9-poetry:0.1.1
-    needs: []
+    coverage: '/line-rate="0.([0-9]{1,2})\d*"/'
+    image: gitlab.lrz.de:5005/i4/software/docker-images/python3.9-poetry
+    needs: [ ]
     rules: &python-rules
         -   changes:
                 - "tum_exam_scripts/**.py"
                 - .gitlab-ci.yml
         -   if: '$CI_COMMIT_BRANCH == "main"'
         -   if: '$CI_COMMIT_BRANCH == "development"'
+        -   if: '$CI_COMMIT_TAG'
     script:
-        - echo $COMMIT_SHORT
+        - poetry install
+        - poetry run mypy --cobertura-xml-report=. --junit-xml=mypy.xml --pretty powerpoint_automation
+        - head -n 1 cobertura.xml
+    stage: pre-analysis
+
+python:test:
+    cache: *python-cache
+    image: gitlab.lrz.de:5005/i4/software/docker-images/python3.9-poetry:0.1.1
+    needs:
+        - python:quality
+    rules: *python-rules
+    script:
+        - poetry install
+        - poetry run pytest tests/
+    stage: test
+
+python:package:
+    artifacts:
+        paths:
+            - dist
+        expire_in: 3 days
+    cache: *python-cache
+    image: gitlab.lrz.de:5005/i4/software/docker-images/python3.9-poetry:0.1.1
+    needs:
+        - python:test
+    rules: *python-rules
+    script:
         - poetry install --no-dev
         - poetry build
-    stage: build
+    stage: package
 
 python:deploy:
     cache: *python-cache
@@ -35,4 +66,4 @@ python:deploy:
         - poetry publish --repository lrz --username $CI_REGISTRY_USER --password $CI_REGISTRY_PASSWORD
     stage: deploy
     needs:
-        - python:build
+        - python:package
