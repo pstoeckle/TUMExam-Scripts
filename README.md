@@ -12,7 +12,7 @@ tum-exam-scripts send-attendee-list --attendee-list
   /path/to/attendeelist.pdf
 ```
 
-## Overview 
+## Commands 
 
 ```bash
 tum-exam-scripts --help
@@ -31,7 +31,7 @@ Commands:
   send-specific-booklets  Send only specific PDFs to the server.
 ```
 
-## Install Linux Driver
+### Install Linux Driver
 
 ```bash
 tum-exam-scripts install-linux-driver --help
@@ -49,7 +49,7 @@ Options:
   --help                  Show this message and exit.
 ```
 
-## Send All Booklets
+### Send All Booklets
 
 ```bash
 tum-exam-scripts send-all-booklets --help
@@ -68,7 +68,7 @@ Options:
   --help                          Show this message and exit.
 ```
 
-## Send Specific Booklets 
+### Send Specific Booklets 
 
 ```bash
 tum-exam-scripts send-specific-booklets --help
@@ -86,7 +86,7 @@ Options:
   --help                  Show this message and exit.
 ```
 
-## Send Attendee List
+### Send Attendee List
 
 ```bash
 tum-exam-scripts send-attendee-list --help
