@@ -1,6 +1,6 @@
 # TUMExam Scripts
 
-[__TOC__]
+[[_TOC_]]
 
 ## TL;DR
 
