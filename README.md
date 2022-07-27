@@ -4,17 +4,17 @@
 
 ## TL;DR
 
-```bash
+```shell
 pip3 install tum-exam-scripts --extra-index-url https://TUM:7rpYfJvEqzG3MvwN3Xfo@gitlab.lrz.de/api/v4/projects/102241/packages/pypi/simple
 tum-exam-scripts install-linux-driver
-tum-exam-scripts send-all-booklets --input-directory /path/to/exams
+tum-exam-scripts send-all-booklets /path/to/exams
 tum-exam-scripts send-attendee-list --attendee-list
   /path/to/attendeelist.pdf
 ```
 
 ## Commands 
 
-```bash
+```shell
 tum-exam-scripts --help
 Usage: tum-exam-scripts [OPTIONS] COMMAND [ARGS]...
 
@@ -33,7 +33,7 @@ Commands:
 
 ### Install Linux Driver
 
-```bash
+```shell
 tum-exam-scripts install-linux-driver --help
 Usage: tum-exam-scripts install-linux-driver [OPTIONS]
 
@@ -51,55 +51,57 @@ Options:
 
 ### Send All Booklets
 
-```bash
+```shell
 tum-exam-scripts send-all-booklets --help
-Usage: tum-exam-scripts send-all-booklets [OPTIONS]
+Usage: tum-exam-scripts send-all-booklets [OPTIONS] [INPUT_DIRECTORY]
 
   Send all booklets to the printing server.
 
-  Example:     tum-exam-scripts send-all-booklets --input-directory
-  /path/to/exams/
+  Example:     tum-exam-scripts send-all-booklets /path/to/exams/
+
+Arguments:
+  [INPUT_DIRECTORY]  The directory with the exams from the TUMExam website.
+                     [default: .]
 
 Options:
-  -d, --driver-name TEXT          Name of the driver  [default: followmeppd]
-  -d, --input-directory DIRECTORY
-                                  The directory with the exams from the
-                                  TUMExam website.  [default: .]
-  --help                          Show this message and exit.
+  -d, --driver-name TEXT  Name of the driver  [default: followmeppd]
+  --help                  Show this message and exit.
 ```
 
 ### Send Specific Booklets 
 
-```bash
+```shell
 tum-exam-scripts send-specific-booklets --help
-Usage: tum-exam-scripts send-specific-booklets [OPTIONS]
+Usage: tum-exam-scripts send-specific-booklets [OPTIONS] [PDF_FILE]...
 
   Send only specific PDFs to the server. You can pass multiple files.
 
-  Example:     tum-exam-scripts send-specific-booklets --booklet-pdf
-  /path/to/E0007-book.pdf --booklet-pdf /path/to/E0009-book.pdf
+  Example:     tum-exam-scripts send-specific-booklets /path/to/E0007-book.pdf
+  /path/to/E0009-book.pdf
+
+Arguments:
+  [PDF_FILE]...  The directory with the exams from the TUMExam website.
 
 Options:
-  -P, --booklet-pdf FILE  The directory with the exams from the TUMExam
-                          website.
   -d, --driver-name TEXT  Name of the driver  [default: followmeppd]
   --help                  Show this message and exit.
 ```
 
 ### Send Attendee List
 
-```bash
+```shell
 tum-exam-scripts send-attendee-list --help
-Usage: tum-exam-scripts send-attendee-list [OPTIONS]
+Usage: tum-exam-scripts send-attendee-list [OPTIONS] [ATTEND_LIST]
 
   Send the attendee list to the server.
 
-  Example:     tum-exam-scripts send-attendee-list --attendee-list
-  /path/to/attendeelist.pdf
+  Example:     tum-exam-scripts send-attendee-list /path/to/attendeelist.pdf
+
+Arguments:
+  [ATTEND_LIST]  The directory with the exams from the TUMExam website.
+                 [default: attendeelist.pdf]
 
 Options:
-  -a, --attendee-list FILE  The directory with the exams from the TUMExam
-                            website.  [default: attendeelist.pdf]
-  -d, --driver-name TEXT    Name of the driver  [default: followmeppd]
-  --help                    Show this message and exit.
+  -d, --driver-name TEXT  Name of the driver  [default: followmeppd]
+  --help                  Show this message and exit.
 ```
