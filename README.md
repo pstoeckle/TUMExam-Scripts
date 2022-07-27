@@ -64,8 +64,13 @@ Arguments:
                      [default: .]
 
 Options:
-  -d, --driver-name TEXT  Name of the driver  [default: followmeppd]
-  --help                  Show this message and exit.
+  -d, --driver-name TEXT    Name of the driver  [default: followmeppd]
+  -b, --batch-size INTEGER  If you add a batch size, the process will stop
+                            after so many exams and wait for you to
+                            continue.You can you this so start all jobs on a
+                            printer, then send the next batch, and start these
+                            exams on another printer.
+  --help                    Show this message and exit.
 ```
 
 ### Send Specific Booklets 
