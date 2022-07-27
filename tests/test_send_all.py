@@ -22,7 +22,6 @@ class SendAllTest(TestCase):
             app,
             [
                 "send-all-booklets",
-                "--input-directory",
                 join("tests", "rsc", "exams_broken"),
             ],
         )
@@ -37,7 +36,6 @@ class SendAllTest(TestCase):
             app,
             [
                 "send-all-booklets",
-                "--input-directory",
                 join("tests", "rsc"),
             ],
         )
@@ -52,7 +50,6 @@ class SendAllTest(TestCase):
             app,
             [
                 "send-all-booklets",
-                "--input-directory",
                 join("tests", "rsc", "exams"),
             ],
         )
@@ -73,7 +70,6 @@ class SendAllTest(TestCase):
             app,
             [
                 "send-all-booklets",
-                "--input-directory",
                 join("tests", "rsc", "exams"),
             ],
         )
@@ -95,7 +91,6 @@ class SendAllTest(TestCase):
                 app,
                 [
                     "send-all-booklets",
-                    "--input-directory",
                     join("tests", "rsc", "exams"),
                 ],
         )
