@@ -7,7 +7,9 @@ stages:
 python:quality:
     artifacts:
         reports:
-            cobertura: cobertura.xml
+            coverage_report:
+                coverage_format: cobertura
+                path: cobertura.xml
             junit: mypy.xml
         expire_in: 10 days
     cache: &python-cache
@@ -35,7 +37,9 @@ python:test:
         when: always
         reports:
             junit: report.xml
-            cobertura: coverage.xml
+            coverage_report:
+                coverage_format: cobertura
+                path: coverage.xml
     cache: *python-cache
     image: gitlab.lrz.de:5005/i4/software/docker-images/python3.9-poetry:0.1.1
     needs:

@@ -11,11 +11,12 @@ from urllib.request import urlretrieve
 
 from tum_exam_scripts import __version__
 from tum_exam_scripts.utils import (
-    send_pdf_files, call_command,
+    call_command,
     confirm_printing_rights,
+    send_pdf_files,
     sudo_call,
 )
-from typer import Exit, Option, Typer, echo
+from typer import Exit, Option, Typer, echo, Argument
 
 _DRIVER_OPTION = Option("followmeppd", "--driver-name", "-d", help="Name of the driver")
 
@@ -75,10 +76,12 @@ def install_linux_driver(
     """
     tempdir = Path(gettempdir())
     local_file = tempdir.joinpath("x2UNIV.ppd")
+    _LOGGER.info("Download PPD file")
     urlretrieve(
         "https://wiki.in.tum.de/foswiki/pub/Informatik/Benutzerwiki/XeroxDrucker/x2UNIV.ppd",
         str(local_file),
     )
+    _LOGGER.info("Success!")
     sudo_call(
         [
             "lpadmin",
@@ -96,18 +99,18 @@ def install_linux_driver(
         ],
         user_password,
     )
+    echo("The Linux driver was successfully installed!")
+    remove(local_file)
     sudo_call(["cupsenable", driver_name], user_password)
     sudo_call(["cupsaccept", driver_name], user_password)
-    remove(local_file)
+    echo(f"The printing service is available under {driver_name}")
 
 
 @app.command()
 def send_all_booklets(
     driver_name: str = _DRIVER_OPTION,
-    input_directory: Path = Option(
+    input_directory: Path = Argument(
         ".",
-        "--input-directory",
-        "-d",
         exists=True,
         resolve_path=True,
         help="The directory with the exams from the TUMExam website.",
@@ -118,7 +121,7 @@ def send_all_booklets(
     Send all booklets to the printing server.
 
     Example:
-        tum-exam-scripts send-all-booklets --input-directory /path/to/exams/
+        tum-exam-scripts send-all-booklets /path/to/exams/
     """
     confirm_printing_rights()
     pdf_files = sorted(input_directory.glob("*-book.pdf"))
@@ -131,10 +134,8 @@ def send_all_booklets(
 
 @app.command()
 def send_specific_booklets(
-    pdf_file: List[Path] = Option(
-        [],
-        "--booklet-pdf",
-        "-P",
+    pdf_file: List[Path] = Argument(
+        None,
         exists=True,
         resolve_path=True,
         help="The directory with the exams from the TUMExam website.",
@@ -146,7 +147,7 @@ def send_specific_booklets(
     Send only specific PDFs to the server. You can pass multiple files.
 
     Example:
-        tum-exam-scripts send-specific-booklets --booklet-pdf /path/to/E0007-book.pdf --booklet-pdf /path/to/E0009-book.pdf
+        tum-exam-scripts send-specific-booklets /path/to/E0007-book.pdf /path/to/E0009-book.pdf
     """
     confirm_printing_rights()
     send_pdf_files(driver_name, pdf_file)
@@ -154,10 +155,8 @@ def send_specific_booklets(
 
 @app.command()
 def send_attendee_list(
-    attend_list: Path = Option(
+    attend_list: Path = Argument(
         "attendeelist.pdf",
-        "--attendee-list",
-        "-a",
         exists=True,
         resolve_path=True,
         help="The directory with the exams from the TUMExam website.",
@@ -169,7 +168,7 @@ def send_attendee_list(
     Send the attendee list to the server.
 
     Example:
-        tum-exam-scripts send-attendee-list --attendee-list /path/to/attendeelist.pdf
+        tum-exam-scripts send-attendee-list /path/to/attendeelist.pdf
     """
     confirm_printing_rights()
     echo(f"Sending document {attend_list} to the printing server ...")
