@@ -1,12 +1,11 @@
 """
 Main.
 """
-
 from logging import INFO, basicConfig, getLogger
 from os import remove
 from pathlib import Path
 from tempfile import gettempdir
-from typing import List
+from typing import List, Optional
 from urllib.request import urlretrieve
 
 from tum_exam_scripts import __version__
@@ -16,7 +15,7 @@ from tum_exam_scripts.utils import (
     send_pdf_files,
     sudo_call,
 )
-from typer import Exit, Option, Typer, echo, Argument
+from typer import Argument, Exit, Option, Typer, echo
 
 _DRIVER_OPTION = Option("followmeppd", "--driver-name", "-d", help="Name of the driver")
 
@@ -116,6 +115,13 @@ def send_all_booklets(
         help="The directory with the exams from the TUMExam website.",
         file_okay=False,
     ),
+    batch_size: Optional[int] = Option(
+        None,
+        "--batch-size",
+        "-b",
+        help="If you add a batch size, the process will stop after so many exams and wait for you to continue."
+        "You can you this so start all jobs on a printer, then send the next batch, and start these exams on another printer.",
+    ),
 ) -> None:
     """
     Send all booklets to the printing server.
@@ -123,13 +129,17 @@ def send_all_booklets(
     Example:
         tum-exam-scripts send-all-booklets /path/to/exams/
     """
+    if batch_size is not None:
+        if batch_size < 2:
+            echo(f"{batch_size} is not a valid batch size!")
+            raise Exit(1)
     confirm_printing_rights()
     pdf_files = sorted(input_directory.glob("*-book.pdf"))
     if len(pdf_files) == 0:
         echo(f"We did not find any booklets. Please check {input_directory}")
         raise Exit(1)
     echo(f"We found {len(pdf_files)} booklets.")
-    send_pdf_files(driver_name, pdf_files)
+    send_pdf_files(driver_name, pdf_files, batch_size)
 
 
 @app.command()

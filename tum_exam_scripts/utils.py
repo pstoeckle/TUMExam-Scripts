@@ -5,9 +5,9 @@ import subprocess  # NOTE: Keep for mock/testing
 from logging import getLogger
 from pathlib import Path
 from subprocess import PIPE, Popen
-from typing import List, Sequence
+from typing import List, Optional, Sequence
 
-from click import echo, style
+from click import echo, pause, style
 from click.exceptions import Exit
 from tqdm import tqdm
 
@@ -76,9 +76,12 @@ def sudo_call(command: List[str], password: str) -> None:
         raise Exit(1)
 
 
-def send_pdf_files(driver_name: str, pdf_files: List[Path]) -> None:
+def send_pdf_files(
+    driver_name: str, pdf_files: List[Path], batch_size: Optional[int] = None
+) -> None:
     """
     Send all PDF files to the server.
+    :param batch_size:
     :param driver_name:
     :param pdf_files:
     :return:
@@ -88,8 +91,8 @@ def send_pdf_files(driver_name: str, pdf_files: List[Path]) -> None:
         if not is_full_pdf(pdf_file):
             error_echo(f"The PDF file {pdf_file} is not a valid PDF.")
             raise Exit(1)
-
-    for pdf_file in tqdm(pdf_files):
+    batch_no = 0
+    for i, pdf_file in enumerate(tqdm(pdf_files)):
         echo(f"Sending document {pdf_file} to the printing server ...")
         current_command = [
             "lp",
@@ -111,4 +114,8 @@ def send_pdf_files(driver_name: str, pdf_files: List[Path]) -> None:
             str(pdf_file),
         ]
         call_command(pdf_file, current_command)
+        if batch_size is not None and ((i + 1) % batch_size) == 0:
+            pause(f"We finished batch {batch_no}")
+            batch_no += 1
+
     echo("Done!")
