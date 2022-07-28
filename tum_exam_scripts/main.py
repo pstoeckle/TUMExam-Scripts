@@ -8,7 +8,9 @@ from tempfile import gettempdir
 from typing import List, Optional
 from urllib.request import urlretrieve
 
+from helium import Button, click, refresh, start_chrome, wait_until, write
 from tum_exam_scripts import __version__
+from tum_exam_scripts.password_handling import get_password_from_keyring, store_password
 from tum_exam_scripts.utils import (
     call_command,
     confirm_printing_rights,
@@ -18,7 +20,10 @@ from tum_exam_scripts.utils import (
 from typer import Argument, Exit, Option, Typer, echo
 
 _DRIVER_OPTION = Option("followmeppd", "--driver-name", "-d", help="Name of the driver")
-
+_USER_ARGUMENT = Argument(
+    None,
+    help="The username for your informatics account, i.e., the first letters of your lastname.",
+)
 _LOGGER = getLogger(__name__)
 basicConfig(
     format="%(levelname)s: %(asctime)s: %(name)s: %(message)s",
@@ -202,6 +207,60 @@ def send_attendee_list(
         str(attend_list),
     ]
     call_command(attend_list, current_command)
+
+
+@app.command()
+def store_password_in_password_manager(
+    password: str = Option(
+        None,
+        "--password",
+        "-p",
+        prompt=True,
+        hide_input=True,
+        help="The password for your informatics account",
+    ),
+    user_name: str = _USER_ARGUMENT,
+    force: bool = Option(
+        False,
+        "--force",
+        "-f",
+        is_flag=True,
+        help="If true, we will overwrite existing passwords.",
+    ),
+) -> None:
+    """
+    Stores the password in the password manager.
+    """
+    store_password(force, password, user_name)
+
+
+@app.command()
+def open_printing_page(user_name: str = _USER_ARGUMENT) -> None:
+    """
+    Open the page we need to send the PDFs to the FollowMe printer.
+
+    """
+    password = get_password_from_keyring(user_name)
+
+    start_chrome("https://ucentral.in.tum.de/cgi-bin/index.cgi")
+    click("Login")
+
+    write(user_name, "User:")
+    write(password, "Password:")
+    click("Login")
+    click("Xerox Printing")
+    refresh()
+    try:
+        wait_until(
+            Button("Diesen Rechner zum Drucken freischalten").is_enabled, timeout_secs=5
+        )
+        click("Diesen Rechner zum Drucken freischalten")
+        refresh()
+        click("Diesen Rechner zum Drucken freischalten")
+    except LookupError:
+        echo("We can already print from this machine")
+
+    echo("NOTE: Keep the browser window open!")
 
 
 if __name__ == "__main__":
