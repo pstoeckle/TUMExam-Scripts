@@ -7,6 +7,8 @@
 ```shell
 pip3 install tum-exam-scripts --extra-index-url https://TUM:7rpYfJvEqzG3MvwN3Xfo@gitlab.lrz.de/api/v4/projects/102241/packages/pypi/simple
 tum-exam-scripts install-linux-driver
+tum-exam-scripts store-password-in-password-manager your-informatics-username
+tum-exam-scripts open-printing-page your-informatics-username
 tum-exam-scripts send-all-booklets /path/to/exams
 tum-exam-scripts send-attendee-list --attendee-list
   /path/to/attendeelist.pdf
@@ -49,6 +51,66 @@ Options:
   --help                  Show this message and exit.
 ```
 
+#### Example
+
+```shell
+tum-exam-scripts install-linux-driver
+```
+
+### Store Password in Password Manager
+
+We need the informatics username and the corresponding password to login into the printing page.
+Thus, we store it in the system's password manager.
+
+```shell
+$ tum-exam-scripts store-password-in-password-manager --help
+Usage: tum-exam-scripts store-password-in-password-manager 
+           [OPTIONS] [USER_NAME]
+
+  Stores the password in the password manager.
+
+Arguments:
+  [USER_NAME]  The username for your informatics account, i.e., the first
+               letters of your lastname.
+
+Options:
+  -p, --password TEXT  The password for your informatics account
+  -f, --force          If true, we will overwrite existing passwords.
+  --help               Show this message and exit.
+```
+
+#### Example
+
+```shell
+$ tum-exam-scripts store-password-in-password-manager stoecklp
+```
+
+### Open the Printing Page
+
+To print the documents via Wi-Fi with the FollowMe service, we need to open the informatics printing page.
+This website has to stay open the whole time you are sending exam sheets to the printers.
+
+
+```shell
+$ tum-exam-scripts open-printing-page --help
+Usage: tum-exam-scripts open-printing-page [OPTIONS] [USER_NAME]
+
+  Open the page we need to send the PDFs to the FollowMe printer.
+
+Arguments:
+  [USER_NAME]  The username for your informatics account, i.e., the first
+               letters of your lastname.
+
+Options:
+  --help  Show this message and exit.
+```
+
+#### Example
+
+```shell
+tum-exam-scripts open-printing-page stoecklp
+```
+
 ### Send All Booklets
 
 ```shell
@@ -71,6 +133,12 @@ Options:
                             printer, then send the next batch, and start these
                             exams on another printer.
   --help                    Show this message and exit.
+```
+
+#### Example
+
+```shell
+$ tum-exam-scripts send-all-booklets .
 ```
 
 ### Send Specific Booklets 
