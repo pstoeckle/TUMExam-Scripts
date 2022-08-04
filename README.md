@@ -9,9 +9,8 @@ pip3 install tum-exam-scripts --extra-index-url https://TUM:7rpYfJvEqzG3MvwN3Xfo
 tum-exam-scripts install-linux-driver
 tum-exam-scripts store-password-in-password-manager your-informatics-username
 tum-exam-scripts open-printing-page your-informatics-username
-tum-exam-scripts send-all-booklets /path/to/exams
-tum-exam-scripts send-attendee-list --attendee-list
-  /path/to/attendeelist.pdf
+tum-exam-scripts send-all-booklets --batch-size 50 /path/to/exams
+tum-exam-scripts send-attendee-list --attendee-list /path/to/attendeelist.pdf
 ```
 
 ## Commands 
