@@ -1,7 +1,10 @@
+"""
+Test.
+"""
 from os.path import join
 from unittest import TestCase, main, mock
 
-from tum_exam_scripts.main import app
+from tum_exam_scripts.pdf_commands import app
 from typer.testing import CliRunner
 
 
@@ -74,31 +77,32 @@ class SendAllTest(TestCase):
             ],
         )
         self.assertEqual(result.exit_code, 0)
-        self.assertIn('We found 2 booklets.', result.stdout)
-        self.assertIn('Done!', result.stdout)
+        self.assertIn("We found 2 booklets.", result.stdout)
+        self.assertIn("Done!", result.stdout)
 
     @mock.patch("typer.confirm")
     @mock.patch("subprocess.check_call")
     def test_send_all_call_error(
-            self,
-            mock_check_call,
-            mock_typer,
+        self,
+        mock_check_call,
+        mock_typer,
     ):
         mock_typer.return_value = True
         mock_check_call.return_value = 1
 
         result = self.runner.invoke(
-                app,
-                [
-                    "send-all-booklets",
-                    join("tests", "rsc", "exams"),
-                ],
+            app,
+            [
+                "send-all-booklets",
+                join("tests", "rsc", "exams"),
+            ],
         )
         self.assertEqual(result.exit_code, 1)
-        self.assertIn('We found 2 booklets.', result.stdout)
-        self.assertIn('Something went wrong when sending', result.stdout)
-        self.assertIn('E0001-book.pdf to the server', result.stdout)
-        self.assertNotIn('Done!', result.stdout)
+        self.assertIn("We found 2 booklets.", result.stdout)
+        self.assertIn("Something went wrong when sending", result.stdout)
+        self.assertIn("E0001-book.pdf to the server", result.stdout)
+        self.assertNotIn("Done!", result.stdout)
+
 
 if __name__ == "__main__":
     main()
