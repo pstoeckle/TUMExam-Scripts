@@ -1,15 +1,21 @@
 """
 PDF utils.
 """
+from logging import getLogger
+from os import remove
 from os.path import getsize
 from pathlib import Path
+from tempfile import gettempdir
 from typing import List, Optional
+from urllib.request import urlretrieve
 
 from click import echo, pause
 from click.exceptions import Exit
 from tqdm import tqdm
 
-from tum_exam_scripts.utils import call_command, error_echo
+from tum_exam_scripts.utils import call_command, error_echo, sudo_call
+
+_LOGGER = getLogger(__name__)
 
 
 def is_full_pdf(current_file: Path) -> bool:
@@ -83,3 +89,60 @@ def send_pdf_files(
             batch_no += 1
 
     echo("Done!")
+
+
+def install_linux_driver_internal(driver_name: str, user_password: str) -> None:
+    tempdir = Path(gettempdir())
+    local_file = tempdir.joinpath("x2UNIV.ppd")
+    _LOGGER.info("Download PPD file")
+    urlretrieve(
+        "https://wiki.in.tum.de/foswiki/pub/Informatik/Benutzerwiki/XeroxDrucker/x2UNIV.ppd",
+        str(local_file),
+    )
+    _LOGGER.info("Success!")
+    sudo_call(
+        [
+            "lpadmin",
+            "-E",
+            "-p",
+            driver_name,
+            "-v",
+            "ipps://print.in.tum.de/printers/followme",
+            "-P",
+            str(local_file),
+            "-D",
+            "Xerox-Followme",
+            "-L",
+            "TUM",
+        ],
+        user_password,
+    )
+    echo("The Linux driver was successfully installed!")
+    remove(local_file)
+    sudo_call(["cupsenable", driver_name], user_password)
+    sudo_call(["cupsaccept", driver_name], user_password)
+    echo(f"The printing service is available under {driver_name}")
+
+
+def send_attendee_list_internal(attend_list: Path, driver_name: str) -> None:
+    echo(f"Sending document {attend_list} to the printing server ...")
+    current_command = [
+        "lp",
+        "-d" + driver_name,
+        "-o",
+        "PageSize=A4",
+        "-o",
+        "JCLBanner=False",
+        "-o",
+        "JCLColorCorrection=PressMatch",
+        "-o",
+        "Duplex=None",
+        "-o",
+        "JCLPrintQuality=Enhanced",
+        "-o",
+        "InputSlot=ManualFeed",
+        "-o",
+        "MediaType=Labels",
+        str(attend_list),
+    ]
+    call_command(attend_list, current_command)

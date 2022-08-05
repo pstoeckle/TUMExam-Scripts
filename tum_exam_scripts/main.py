@@ -2,21 +2,18 @@
 Main.
 """
 from logging import INFO, basicConfig, getLogger
-from os import remove
 from pathlib import Path
-from tempfile import gettempdir
 from typing import List, Optional
-from urllib.request import urlretrieve
 
-from helium import Button, click, refresh, start_chrome, wait_until, write
 from tum_exam_scripts import __version__
 from tum_exam_scripts.password_handling import get_password_from_keyring, store_password
-from tum_exam_scripts.utils import (
-    call_command,
-    confirm_printing_rights,
-    sudo_call,
+from tum_exam_scripts.pdf_utils import (
+    install_linux_driver_internal,
+    send_attendee_list_internal,
+    send_pdf_files,
 )
-from tum_exam_scripts.pdf_utils import send_pdf_files
+from tum_exam_scripts.utils import confirm_printing_rights
+from tum_exam_scripts.website_utils import open_website_internal
 from typer import Argument, Exit, Option, Typer, echo
 
 _DRIVER_OPTION = Option("followmeppd", "--driver-name", "-d", help="Name of the driver")
@@ -78,36 +75,7 @@ def install_linux_driver(
     This is needed as the macOS driver cannot handle the booklets.
     Please change the command on mac for printing the exams from `-dfollowme` to `-dfollowmepdd`!!!
     """
-    tempdir = Path(gettempdir())
-    local_file = tempdir.joinpath("x2UNIV.ppd")
-    _LOGGER.info("Download PPD file")
-    urlretrieve(
-        "https://wiki.in.tum.de/foswiki/pub/Informatik/Benutzerwiki/XeroxDrucker/x2UNIV.ppd",
-        str(local_file),
-    )
-    _LOGGER.info("Success!")
-    sudo_call(
-        [
-            "lpadmin",
-            "-E",
-            "-p",
-            driver_name,
-            "-v",
-            "ipps://print.in.tum.de/printers/followme",
-            "-P",
-            str(local_file),
-            "-D",
-            "Xerox-Followme",
-            "-L",
-            "TUM",
-        ],
-        user_password,
-    )
-    echo("The Linux driver was successfully installed!")
-    remove(local_file)
-    sudo_call(["cupsenable", driver_name], user_password)
-    sudo_call(["cupsaccept", driver_name], user_password)
-    echo(f"The printing service is available under {driver_name}")
+    install_linux_driver_internal(driver_name, user_password)
 
 
 @app.command()
@@ -186,27 +154,7 @@ def send_attendee_list(
         tum-exam-scripts send-attendee-list /path/to/attendeelist.pdf
     """
     confirm_printing_rights()
-    echo(f"Sending document {attend_list} to the printing server ...")
-    current_command = [
-        "lp",
-        "-d" + driver_name,
-        "-o",
-        "PageSize=A4",
-        "-o",
-        "JCLBanner=False",
-        "-o",
-        "JCLColorCorrection=PressMatch",
-        "-o",
-        "Duplex=None",
-        "-o",
-        "JCLPrintQuality=Enhanced",
-        "-o",
-        "InputSlot=ManualFeed",
-        "-o",
-        "MediaType=Labels",
-        str(attend_list),
-    ]
-    call_command(attend_list, current_command)
+    send_attendee_list_internal(attend_list, driver_name)
 
 
 @app.command()
@@ -241,26 +189,7 @@ def open_printing_page(user_name: str = _USER_ARGUMENT) -> None:
 
     """
     password = get_password_from_keyring(user_name)
-
-    start_chrome("https://ucentral.in.tum.de/cgi-bin/index.cgi")
-    click("Login")
-
-    write(user_name, "User:")
-    write(password, "Password:")
-    click("Login")
-    click("Xerox Printing")
-    refresh()
-    try:
-        wait_until(
-            Button("Diesen Rechner zum Drucken freischalten").is_enabled, timeout_secs=5
-        )
-        click("Diesen Rechner zum Drucken freischalten")
-        refresh()
-        click("Diesen Rechner zum Drucken freischalten")
-    except LookupError:
-        echo("We can already print from this machine")
-
-    echo("NOTE: Keep the browser window open!")
+    open_website_internal(user_name, password)
 
 
 if __name__ == "__main__":
