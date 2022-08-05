@@ -13,7 +13,7 @@ from click import echo, pause
 from click.exceptions import Exit
 from tqdm import tqdm
 
-from tum_exam_scripts.utils import call_command, error_echo, sudo_call
+from tum_exam_scripts.utils.command import call_command, error_echo, sudo_call
 
 _LOGGER = getLogger(__name__)
 

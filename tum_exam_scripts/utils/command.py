@@ -72,5 +72,3 @@ def sudo_call(command: List[str], password: str) -> None:
         error_echo("Installation went wrong.")
         error_echo(f"Please open a shell and call 'sudo {' '.join(command)}'")
         raise Exit(1)
-
-

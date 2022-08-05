@@ -2,21 +2,18 @@
 Main.
 """
 from logging import INFO, basicConfig, getLogger
-from pathlib import Path
-from typing import List, Optional
 
 from tum_exam_scripts import __version__
-from tum_exam_scripts.password_handling import get_password_from_keyring, store_password
-from tum_exam_scripts.pdf_utils import (
-    install_linux_driver_internal,
-    send_attendee_list_internal,
-    send_pdf_files,
+from tum_exam_scripts.logic.pdf_printing import install_linux_driver_internal
+from tum_exam_scripts.pdf_commands import app as pdf_commands_app
+from tum_exam_scripts.shared import DRIVER_OPTION
+from tum_exam_scripts.utils.password_handling import (
+    get_password_from_keyring,
+    store_password,
 )
-from tum_exam_scripts.utils import confirm_printing_rights
-from tum_exam_scripts.website_utils import open_website_internal
+from tum_exam_scripts.utils.website import open_website_internal
 from typer import Argument, Exit, Option, Typer, echo
 
-_DRIVER_OPTION = Option("followmeppd", "--driver-name", "-d", help="Name of the driver")
 _USER_ARGUMENT = Argument(
     None,
     help="The username for your informatics account, i.e., the first letters of your lastname.",
@@ -60,7 +57,7 @@ def _call_back(
 
 @app.command()
 def install_linux_driver(
-    driver_name: str = _DRIVER_OPTION,
+    driver_name: str = DRIVER_OPTION,
     user_password: str = Option(
         None,
         "--password",
@@ -76,85 +73,6 @@ def install_linux_driver(
     Please change the command on mac for printing the exams from `-dfollowme` to `-dfollowmepdd`!!!
     """
     install_linux_driver_internal(driver_name, user_password)
-
-
-@app.command()
-def send_all_booklets(
-    driver_name: str = _DRIVER_OPTION,
-    input_directory: Path = Argument(
-        ".",
-        exists=True,
-        resolve_path=True,
-        help="The directory with the exams from the TUMExam website.",
-        file_okay=False,
-    ),
-    batch_size: Optional[int] = Option(
-        None,
-        "--batch-size",
-        "-b",
-        help="If you add a batch size, the process will stop after so many exams and wait for you to continue."
-        "You can you this so start all jobs on a printer, then send the next batch, and start these exams on another printer.",
-    ),
-) -> None:
-    """
-    Send all booklets to the printing server.
-
-    Example:
-        tum-exam-scripts send-all-booklets /path/to/exams/
-    """
-    if batch_size is not None:
-        if batch_size < 2:
-            echo(f"{batch_size} is not a valid batch size!")
-            raise Exit(1)
-    confirm_printing_rights()
-    pdf_files = sorted(input_directory.glob("*-book.pdf"))
-    if len(pdf_files) == 0:
-        echo(f"We did not find any booklets. Please check {input_directory}")
-        raise Exit(1)
-    echo(f"We found {len(pdf_files)} booklets.")
-    send_pdf_files(driver_name, pdf_files, batch_size)
-
-
-@app.command()
-def send_specific_booklets(
-    pdf_file: List[Path] = Argument(
-        None,
-        exists=True,
-        resolve_path=True,
-        help="The directory with the exams from the TUMExam website.",
-        dir_okay=False,
-    ),
-    driver_name: str = _DRIVER_OPTION,
-) -> None:
-    """
-    Send only specific PDFs to the server. You can pass multiple files.
-
-    Example:
-        tum-exam-scripts send-specific-booklets /path/to/E0007-book.pdf /path/to/E0009-book.pdf
-    """
-    confirm_printing_rights()
-    send_pdf_files(driver_name, pdf_file)
-
-
-@app.command()
-def send_attendee_list(
-    attend_list: Path = Argument(
-        "attendeelist.pdf",
-        exists=True,
-        resolve_path=True,
-        help="The directory with the exams from the TUMExam website.",
-        dir_okay=False,
-    ),
-    driver_name: str = _DRIVER_OPTION,
-) -> None:
-    """
-    Send the attendee list to the server.
-
-    Example:
-        tum-exam-scripts send-attendee-list /path/to/attendeelist.pdf
-    """
-    confirm_printing_rights()
-    send_attendee_list_internal(attend_list, driver_name)
 
 
 @app.command()
@@ -191,6 +109,8 @@ def open_printing_page(user_name: str = _USER_ARGUMENT) -> None:
     password = get_password_from_keyring(user_name)
     open_website_internal(user_name, password)
 
+
+app.add_typer(pdf_commands_app, name="pdf")
 
 if __name__ == "__main__":
     app()
