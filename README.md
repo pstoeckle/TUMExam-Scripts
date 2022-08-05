@@ -5,7 +5,7 @@
 ## TL;DR
 
 ```shell
-pip3 install tum-exam-scripts --extra-index-url https://TUM:7rpYfJvEqzG3MvwN3Xfo@gitlab.lrz.de/api/v4/projects/102241/packages/pypi/simple
+pip3 install tum-exam-scripts --upgrade --extra-index-url https://TUM:7rpYfJvEqzG3MvwN3Xfo@gitlab.lrz.de/api/v4/projects/102241/packages/pypi/simple
 tum-exam-scripts install-linux-driver
 tum-exam-scripts store-password-in-password-manager your-informatics-username
 tum-exam-scripts open-printing-page your-informatics-username
