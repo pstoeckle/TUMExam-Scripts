@@ -14,9 +14,9 @@ from tum_exam_scripts.password_handling import get_password_from_keyring, store_
 from tum_exam_scripts.utils import (
     call_command,
     confirm_printing_rights,
-    send_pdf_files,
     sudo_call,
 )
+from tum_exam_scripts.pdf_utils import send_pdf_files
 from typer import Argument, Exit, Option, Typer, echo
 
 _DRIVER_OPTION = Option("followmeppd", "--driver-name", "-d", help="Name of the driver")
