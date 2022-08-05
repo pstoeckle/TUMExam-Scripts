@@ -7,7 +7,10 @@ from typing import List, Optional
 from click import echo
 from click.exceptions import Exit
 
-from tum_exam_scripts.logic.pdf_printing import send_attendee_list_internal, send_pdf_files
+from tum_exam_scripts.logic.pdf_printing import (
+    send_attendee_list_internal,
+    send_pdf_files,
+)
 from tum_exam_scripts.shared import DRIVER_OPTION
 from tum_exam_scripts.utils.command import call_command, confirm_printing_rights
 from typer import Argument, Option, Typer
@@ -18,7 +21,7 @@ app = Typer()
 @app.callback()
 def _call_back() -> None:
     """
-    PDF commands.
+    Subgroup with the PDF printing commands.
     """
 
 
@@ -102,7 +105,7 @@ def send_attendee_list(
 
 
 @app.command()
-def send_seat_plans(
+def send_seat_plan(
     seat_plan: Path = Argument(
         "seatplan-a3.pdf",
         exists=True,

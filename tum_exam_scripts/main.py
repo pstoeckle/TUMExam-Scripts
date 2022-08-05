@@ -50,8 +50,7 @@ def _call_back(
     )
 ) -> None:
     """
-
-    :return:
+    A collection of useful commands to print TUMExams. You can find the source code under https://gitlab.lrz.de/i4/software/tum-exam-scripts
     """
 
 
