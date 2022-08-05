@@ -34,7 +34,7 @@ def store_password(force: bool, password: str, user_name: str) -> None:
     echo("We stored the password!")
 
 
-def get_password_from_keyring(user_name: str) -> Optional[str]:
+def get_password_from_keyring(user_name: str) -> str:
     """
 
     :param user_name:
