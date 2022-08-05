@@ -268,3 +268,7 @@ $ tum-exam-scripts pdf send-seat-plan --help
 ```shell
 tum-exam-scripts pdf send-seat-plan /path/to/seatplan-a3.pdf
 ```
+
+## Contact
+
+If you have any question, please contact [Patrick Stöckle](mailto:patrick.stoeckle@tum.de?subject=GitLab%3A%20TUMExam%20Scripts&body=Hi%2C%0AI%20have%20the%20following%20question%20regarding%20the%20TUMExam%20Scripts%20library%3A).
