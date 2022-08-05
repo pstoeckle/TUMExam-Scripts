@@ -4,7 +4,7 @@ Test.
 from os.path import join
 from unittest import TestCase, main, mock
 
-from tum_exam_scripts.main import app
+from tum_exam_scripts.pdf_commands import app
 from typer.testing import CliRunner
 
 
