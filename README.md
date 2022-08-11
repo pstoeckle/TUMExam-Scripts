@@ -99,18 +99,21 @@ This website has to stay open the whole time you are sending exam sheets to the 
 
 ```shell
 $ tum-exam-scripts open-printing-page --help
-
- Usage: tum-exam-scripts open-printing-page [OPTIONS] [USER_NAME]
-                                                                                        
- Open the page we need to send the PDFs to the FollowMe printer.                                                                                         
- 
-╭─ Arguments ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│   user_name      [USER_NAME]  The username for your informatics account, i.e., the first letters of your lastname. [default: None]                    │
-╰───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
-╭─ Options ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ --browser  -b      [chrome|firefox]  The browser to start. [default: firefox]                                                                         │
-│ --help                               Show this message and exit.                                                                                      │
-╰───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+                                                                                                                                                        
+ Usage: tum-exam-scripts open-printing-page [OPTIONS] [USER_NAME]                                                                                       
+                                                                                                                                                        
+ Open the page we need to send the PDFs to the FollowMe printer.                                                                                        
+                                                                                                                                                        
+╭─ Arguments ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│   user_name      [USER_NAME]  The username for your informatics account, i.e., the first letters of your lastname. [default: None]                   │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Options ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --browser   -b      [chrome|firefox]  The browser to start. [default: firefox]                                                                       │
+│ --password  -p      TEXT              The password for your informatics account. If you do not pass a password, we will use the password stored in   │
+│                                       the password manager.                                                                                          │
+│                                       [default: None]                                                                                                │
+│ --help                                Show this message and exit.                                                                                    │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```
 
 #### Open the Printing Page: Example
