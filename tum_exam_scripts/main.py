@@ -4,6 +4,7 @@ Main.
 from logging import INFO, basicConfig, getLogger
 
 from tum_exam_scripts import __version__
+from tum_exam_scripts.enums import Browser
 from tum_exam_scripts.logic.pdf_printing import install_linux_driver_internal
 from tum_exam_scripts.pdf_commands import app as pdf_commands_app
 from tum_exam_scripts.shared import DRIVER_OPTION
@@ -100,13 +101,18 @@ def store_password_in_password_manager(
 
 
 @app.command()
-def open_printing_page(user_name: str = _USER_ARGUMENT) -> None:
+def open_printing_page(
+    user_name: str = _USER_ARGUMENT,
+    browser: Browser = Option(
+        "firefox", "--browser", "-b", help="The browser to start."
+    ),
+) -> None:
     """
     Open the page we need to send the PDFs to the FollowMe printer.
 
     """
     password = get_password_from_keyring(user_name)
-    open_website_internal(user_name, password)
+    open_website_internal(user_name, password, browser)
 
 
 app.add_typer(pdf_commands_app, name="pdf")
