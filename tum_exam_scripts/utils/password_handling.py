@@ -3,7 +3,6 @@ Password handling
 """
 from logging import getLogger
 from sys import platform
-from typing import Optional
 
 from keyring import get_password, set_keyring, set_password
 from keyring.backends.macOS import Keyring as macos_Keyring

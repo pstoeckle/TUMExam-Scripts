@@ -2,6 +2,7 @@
 Main.
 """
 from logging import INFO, basicConfig, getLogger
+from typing import Optional
 
 from tum_exam_scripts import __version__
 from tum_exam_scripts.enums import Browser
@@ -106,12 +107,19 @@ def open_printing_page(
     browser: Browser = Option(
         "firefox", "--browser", "-b", help="The browser to start."
     ),
+    password: Optional[str] = Option(
+        None,
+        "--password",
+        "-p",
+        help="The password for your informatics account. If you do not pass a password, we will use the password stored in the password manager.",
+    ),
 ) -> None:
     """
     Open the page we need to send the PDFs to the FollowMe printer.
 
     """
-    password = get_password_from_keyring(user_name)
+    if password is None:
+        password = get_password_from_keyring(user_name)
     open_website_internal(user_name, password, browser)
 
 
