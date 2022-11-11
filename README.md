@@ -1,11 +1,9 @@
 # TUMExam Scripts
 
-[[_TOC_]]
-
 ## TL;DR
 
 ```shell
-pip3 install tum-exam-scripts --upgrade --extra-index-url https://TUM:7rpYfJvEqzG3MvwN3Xfo@gitlab.lrz.de/api/v4/projects/102241/packages/pypi/simple
+pip3 install tum-exam-scripts --upgrade
 tum-exam-scripts install-linux-driver
 tum-exam-scripts store-password-in-password-manager your-informatics-username
 tum-exam-scripts open-printing-page your-informatics-username
@@ -15,15 +13,15 @@ tum-exam-scripts pdf send-room-layout /path/to/roomplan.pdf
 tum-exam-scripts pdf send-seat-plan /path/to/seatplan-a3.pdf
 ```
 
-## Commands 
+## Commands
 
 ```shell
 $ tum-exam-scripts --help
-                                                                                                                                                                                                                                              
- Usage: tum-exam-scripts [OPTIONS] COMMAND [ARGS]...                                                                                                                                                                                          
-                                                                                                                                                                                                                                              
- A collection of useful commands to print TUMExams. You can find the source code under https://gitlab.lrz.de/i4/software/tum-exam-scripts                                                                                                     
-                                                                                                                                                                                                                                              
+
+ Usage: tum-exam-scripts [OPTIONS] COMMAND [ARGS]...
+
+ A collection of useful commands to print TUMExams. You can find the source code under https://gitlab.lrz.de/i4/software/tum-exam-scripts
+
 ╭─ Options ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
 │ --version                     Version                                                                                                                                                                                                      │
 │ --install-completion          Install completion for the current shell.                                                                                                                                                                    │
@@ -43,12 +41,12 @@ $ tum-exam-scripts --help
 
 ```shell
 $ tum-exam-scripts install-linux-driver --help
-                                                                                                                                                                                                                                              
- Usage: tum-exam-scripts install-linux-driver [OPTIONS]                                                                                                                                                                                       
-                                                                                                                                                                                                                                              
- This snippet downloads the Linux driver for the printers and makes them available under $driver_name This is needed as the macOS driver cannot handle the booklets. Please change the command on mac for printing the exams from             
- `-dfollowme` to `-dfollowmepdd`!!!                                                                                                                                                                                                           
-                                                                                                                                                                                                                                              
+
+ Usage: tum-exam-scripts install-linux-driver [OPTIONS]
+
+ This snippet downloads the Linux driver for the printers and makes them available under $driver_name This is needed as the macOS driver cannot handle the booklets. Please change the command on mac for printing the exams from
+ `-dfollowme` to `-dfollowmepdd`!!!
+
 ╭─ Options ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
 │ --driver-name  -d      TEXT  Name of the driver [default: followmeppd]                                                                                                                                                                     │
 │ --password     -p      TEXT  Your user password. NOTE: The user should have 'sudo' privileges. [default: None]                                                                                                                             │
@@ -69,12 +67,12 @@ Thus, we store it in the system's password manager.
 
 ```shell
 $ tum-exam-scripts store-password-in-password-manager --help
-                                                                                                                                                                                                                                              
- Usage: tum-exam-scripts store-password-in-password-manager                                                                                                                                                                                   
-            [OPTIONS] [USER_NAME]                                                                                                                                                                                                             
-                                                                                                                                                                                                                                              
- Stores the password in the password manager.                                                                                                                                                                                                 
-                                                                                                                                                                                                                                              
+
+ Usage: tum-exam-scripts store-password-in-password-manager
+            [OPTIONS] [USER_NAME]
+
+ Stores the password in the password manager.
+
 ╭─ Arguments ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
 │   user_name      [USER_NAME]  The username for your informatics account, i.e., the first letters of your lastname. [default: None]                                                                                                         │
 ╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
@@ -99,11 +97,11 @@ This website has to stay open the whole time you are sending exam sheets to the 
 
 ```shell
 $ tum-exam-scripts open-printing-page --help
-                                                                                                                                                        
- Usage: tum-exam-scripts open-printing-page [OPTIONS] [USER_NAME]                                                                                       
-                                                                                                                                                        
- Open the page we need to send the PDFs to the FollowMe printer.                                                                                        
-                                                                                                                                                        
+
+ Usage: tum-exam-scripts open-printing-page [OPTIONS] [USER_NAME]
+
+ Open the page we need to send the PDFs to the FollowMe printer.
+
 ╭─ Arguments ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
 │   user_name      [USER_NAME]  The username for your informatics account, i.e., the first letters of your lastname. [default: None]                   │
 ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
@@ -124,14 +122,14 @@ tum-exam-scripts open-printing-page stoecklp
 
 ### PDF Commands
 
-I grouped all the PDF sending commands into a subgroup called `pdf`. 
+I grouped all the PDF sending commands into a subgroup called `pdf`.
 
 ```shell
-                                                                                                                                                                                                                                              
- Usage: tum-exam-scripts pdf [OPTIONS] COMMAND [ARGS]...                                                                                                                                                                                      
-                                                                                                                                                                                                                                              
- Subgroup with the PDF printing commands.                                                                                                                                                                                                     
-                                                                                                                                                                                                                                              
+
+ Usage: tum-exam-scripts pdf [OPTIONS] COMMAND [ARGS]...
+
+ Subgroup with the PDF printing commands.
+
 ╭─ Options ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
 │ --help          Show this message and exit.                                                                                                                                                                                                │
 ╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
@@ -149,12 +147,12 @@ I grouped all the PDF sending commands into a subgroup called `pdf`.
 
 ```shell
 $ tum-exam-scripts pdf send-all-booklets --help
-                                                                                                                                                                                                                                              
- Usage: tum-exam-scripts pdf send-all-booklets [OPTIONS] [INPUT_DIRECTORY]                                                                                                                                                                    
-                                                                                                                                                                                                                                              
- Send all booklets to the printing server.                                                                                                                                                                                                    
- Example:     tum-exam-scripts send-all-booklets /path/to/exams/                                                                                                                                                                              
-                                                                                                                                                                                                                                              
+
+ Usage: tum-exam-scripts pdf send-all-booklets [OPTIONS] [INPUT_DIRECTORY]
+
+ Send all booklets to the printing server.
+ Example:     tum-exam-scripts send-all-booklets /path/to/exams/
+
 ╭─ Arguments ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
 │   input_directory      [INPUT_DIRECTORY]  The directory with the exams from the TUMExam website. [default: .]                                                                                                                              │
 ╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
@@ -173,16 +171,16 @@ $ tum-exam-scripts pdf send-all-booklets --help
 tum-exam-scripts pdf send-all-booklets .
 ```
 
-#### Send Specific Booklets 
+#### Send Specific Booklets
 
 ```shell
 $ tum-exam-scripts pdf send-specific-booklets --help
-                                                                                                                                                                                                                                              
- Usage: tum-exam-scripts pdf send-specific-booklets [OPTIONS] [PDF_FILE]...                                                                                                                                                                   
-                                                                                                                                                                                                                                              
- Send only specific PDFs to the server. You can pass multiple files.                                                                                                                                                                          
- Example:     tum-exam-scripts send-specific-booklets /path/to/E0007-book.pdf /path/to/E0009-book.pdf                                                                                                                                         
-                                                                                                                                                                                                                                              
+
+ Usage: tum-exam-scripts pdf send-specific-booklets [OPTIONS] [PDF_FILE]...
+
+ Send only specific PDFs to the server. You can pass multiple files.
+ Example:     tum-exam-scripts send-specific-booklets /path/to/E0007-book.pdf /path/to/E0009-book.pdf
+
 ╭─ Arguments ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
 │   pdf_file      [PDF_FILE]...  The directory with the exams from the TUMExam website. [default: None]                                                                                                                                      │
 ╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
@@ -202,12 +200,12 @@ tum-exam-scripts pdf send-specific-booklets /path/to/E0007-book.pdf /path/to/E00
 
 ```shell
 $ tum-exam-scripts pdf send-attendee-list --help
-                                                                                                                                                                                                                                              
- Usage: tum-exam-scripts pdf send-attendee-list [OPTIONS] [ATTEND_LIST]                                                                                                                                                                       
-                                                                                                                                                                                                                                              
- Send the attendee list to the server.                                                                                                                                                                                                        
- Example:     tum-exam-scripts send-attendee-list /path/to/attendeelist.pdf                                                                                                                                                                   
-                                                                                                                                                                                                                                              
+
+ Usage: tum-exam-scripts pdf send-attendee-list [OPTIONS] [ATTEND_LIST]
+
+ Send the attendee list to the server.
+ Example:     tum-exam-scripts send-attendee-list /path/to/attendeelist.pdf
+
 ╭─ Arguments ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
 │   attend_list      [ATTEND_LIST]  The attendee list from the TUMExam endterm_lists folder. [default: attendeelist.pdf]                                                                                                                     │
 ╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
@@ -226,11 +224,11 @@ tum-exam-scripts send-attendee-list /path/to/attendeelist.pdf
 
 ```shell
 $ tum-exam-scripts pdf send-room-layout --help
-                                                                                                                                                                                                                                              
- Usage: tum-exam-scripts pdf send-room-layout [OPTIONS] [ROOM_PLAN]                                                                                                                                                                           
-                                                                                                                                                                                                                                              
- Print the room plans in A3. You have to put them at the doors of the lecture hall.                                                                                                                                                           
-                                                                                                                                                                                                                                              
+
+ Usage: tum-exam-scripts pdf send-room-layout [OPTIONS] [ROOM_PLAN]
+
+ Print the room plans in A3. You have to put them at the doors of the lecture hall.
+
 ╭─ Arguments ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
 │   room_plan      [ROOM_PLAN]  The room plan in A3 from the TUMExam endterm_lists folder. [default: roomplan.pdf]                                                                                                                           │
 ╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
@@ -252,11 +250,11 @@ tum-exam-scripts pdf send-room-layout /path/to/roomplan.pdf
 
 ```shell
 $ tum-exam-scripts pdf send-seat-plan --help
-                                                                                                                                                                                                                                              
- Usage: tum-exam-scripts pdf send-seat-plan [OPTIONS] [SEAT_PLAN]                                                                                                                                                                             
-                                                                                                                                                                                                                                              
- Print the seat plans in A3. You have to put them at the doors of the lecture hall.                                                                                                                                                           
-                                                                                                                                                                                                                                              
+
+ Usage: tum-exam-scripts pdf send-seat-plan [OPTIONS] [SEAT_PLAN]
+
+ Print the seat plans in A3. You have to put them at the doors of the lecture hall.
+
 ╭─ Arguments ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
 │   seat_plan      [SEAT_PLAN]  The seat plan in A3 from the TUMExam endterm_lists folder. [default: seatplan-a3.pdf]                                                                                                                        │
 ╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
