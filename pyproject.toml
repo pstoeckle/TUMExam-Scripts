@@ -1,18 +1,19 @@
 [tool.poetry]
 name = "tum-exam-scripts"
-version = "0.1.6"
+version = "0.1.7"
 description = ""
 authors = ["Patrick Stöckle <patrick.stoeckle@tum.de>"]
 maintainers = ["Patrick Stöckle <patrick.stoeckle@tum.de>"]
 readme = "README.md"
-repository = "git@gitlab.lrz.de:i4/software/tum-exam-scripts.git"
+repository = "https://github.com/pstoeckle/TUMExam-Scripts"
+license = "Apache-2.0"
 
 [tool.poetry.dependencies]
 python = ">=3.7,<4.0"
-typer = "^0.6.1"
-tqdm = "^4.64.0"
+typer = "^0.7.0"
+tqdm = "^4.64.1"
 helium = "^3.0.8"
-keyring = "^23.7.0"
+keyring = "^23.11.0"
 
 [tool.poetry.dev-dependencies]
 coverage = "^6.3.1"
